@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Room Configurator</title>
+    <style>
+        :root {
+            --color-single: #60a5fa;
+            --color-double: #34d399;
+            --color-junior-suite: #fbbf24;
+            --color-suite: #f87171;
+            --color-empty: #e5e7eb;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        #configurator {
+            background: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin: 0 0 24px 0;
+            font-size: 22px;
+            color: #1f2937;
+        }
+
+        h2 {
+            font-size: 16px;
+            color: #374151;
+            margin: 24px 0 12px 0;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* --- Inputs --- */
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .input-row label {
+            min-width: 150px;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .input-row input[type="number"] {
+            width: 90px;
+            padding: 6px 10px;
+            font-size: 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+        }
+
+        .derived-display {
+            font-size: 14px;
+            color: #6b7280;
+            margin: 6px 0 14px 0;
+        }
+
+        .derived-display strong {
+            color: #1f2937;
+            font-size: 16px;
+        }
+
+        /* --- Sliders --- */
+        .slider-section-label {
+            font-size: 14px;
+            color: #374151;
+            margin: 14px 0 8px 0;
+            font-weight: bold;
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .slider-row label {
+            min-width: 120px;
+            font-size: 14px;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .slider-row input[type="range"] {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .pct-display {
+            min-width: 40px;
+            text-align: right;
+            font-weight: bold;
+            font-size: 14px;
+            color: #1f2937;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        #pct-total-display {
+            font-size: 13px;
+            color: #6b7280;
+            margin: 4px 0 6px 0;
+        }
+
+        #pct-warning {
+            color: #dc2626;
+            font-size: 13px;
+            margin: 2px 0 6px 0;
+        }
+
+        /* --- Generate Button --- */
+        button {
+            padding: 10px 22px;
+            font-size: 15px;
+            cursor: pointer;
+            background: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-top: 8px;
+        }
+
+        button:hover:not(:disabled) {
+            background: #374151;
+        }
+
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        #btn-export {
+            background: #065f46;
+            margin-top: 4px;
+        }
+
+        #btn-export:hover {
+            background: #047857;
+        }
+
+        /* --- Metric Cards --- */
+        #metrics-grid {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .metric-card {
+            flex: 1 1 150px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 14px 16px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 26px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        /* --- Floor Plan --- */
+        #floor-plan-legend {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #374151;
+        }
+
+        #floor-plan-container {
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .floor-row {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            margin-bottom: 3px;
+        }
+
+        .floor-label {
+            min-width: 64px;
+            font-size: 11px;
+            color: #9ca3af;
+            text-align: right;
+            padding-right: 8px;
+            flex-shrink: 0;
+        }
+
+        .room-cell {
+            width: 18px;
+            height: 18px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .room-single       { background-color: var(--color-single); }
+        .room-double       { background-color: var(--color-double); }
+        .room-junior-suite { background-color: var(--color-junior-suite); }
+        .room-suite        { background-color: var(--color-suite); }
+        .room-empty        { background-color: var(--color-empty); }
+
+        /* --- Summary Table --- */
+        #summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        #summary-table th,
+        #summary-table td {
+            text-align: left;
+            padding: 8px 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        #summary-table thead th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        #summary-table tfoot td {
+            font-weight: bold;
+            background: #f3f4f6;
+            border-top: 2px solid #d1d5db;
+        }
+
+        .type-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* --- Utilities --- */
+        .hidden { display: none !important; }
+
+        section { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <div id="configurator">
+        <h1>Hotel Room Configurator</h1>
+
+        <!-- SECTION: Inputs -->
+        <section id="section-inputs">
+            <h2>Configuration</h2>
+
+            <div class="input-row">
+                <label for="input-floors">Height limit (floors)</label>
+                <input type="number" id="input-floors" min="1" max="200" value="10">
+            </div>
+            <div class="input-row">
+                <label for="input-rooms-per-floor">Rooms per floor</label>
+                <input type="number" id="input-rooms-per-floor" min="1" max="200" value="10">
+            </div>
+
+            <div class="derived-display">
+                Total keys: <strong id="derived-total-rooms">100</strong>
+            </div>
+
+            <div class="slider-section-label">Room type mix</div>
+
+            <div class="slider-row">
+                <label for="slider-single">
+                    <span class="legend-dot" style="background:var(--color-single)"></span>
+                    Single
+                </label>
+                <input type="range" id="slider-single" min="0" max="100" value="40">
+                <span class="pct-display" id="pct-single">40%</span>
+            </div>
+            <div class="slider-row">
+                <label for="slider-double">
+                    <span class="legend-dot" style="background:var(--color-double)"></span>
+                    Double
+                </label>
+                <input type="range" id="slider-double" min="0" max="100" value="30">
+                <span class="pct-display" id="pct-double">30%</span>
+            </div>
+            <div class="slider-row">
+                <label for="slider-junior-suite">
+                    <span class="legend-dot" style="background:var(--color-junior-suite)"></span>
+                    Junior Suite
+                </label>
+                <input type="range" id="slider-junior-suite" min="0" max="100" value="20">
+                <span class="pct-display" id="pct-junior-suite">20%</span>
+            </div>
+            <div class="slider-row">
+                <label for="slider-suite">
+                    <span class="legend-dot" style="background:var(--color-suite)"></span>
+                    Suite
+                </label>
+                <input type="range" id="slider-suite" min="0" max="100" value="10">
+                <span class="pct-display" id="pct-suite">10%</span>
+            </div>
+
+            <div id="pct-total-display">Total: <strong id="pct-total">100</strong>%</div>
+            <div id="pct-warning" class="hidden">Percentages must sum to 100%</div>
+
+            <button id="btn-generate" onclick="generate()">Generate Floor Plan</button>
+        </section>
+
+        <!-- SECTION: Metrics (hidden until generated) -->
+        <section id="section-metrics" class="hidden">
+            <h2>Capacity Metrics</h2>
+            <div id="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="m-total-keys"></div>
+                    <div class="metric-label">Total Keys</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="m-total-guests"></div>
+                    <div class="metric-label">Max Guests</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="m-total-area"></div>
+                    <div class="metric-label">Total Area (m²)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="m-avg-size"></div>
+                    <div class="metric-label">Avg Room Size (m²)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Floor Plan (hidden until generated) -->
+        <section id="section-floorplan" class="hidden">
+            <h2>Visual Floor Plan</h2>
+            <div id="floor-plan-legend">
+                <span class="legend-item"><span class="legend-dot" style="background:var(--color-single)"></span> Single</span>
+                <span class="legend-item"><span class="legend-dot" style="background:var(--color-double)"></span> Double</span>
+                <span class="legend-item"><span class="legend-dot" style="background:var(--color-junior-suite)"></span> Junior Suite</span>
+                <span class="legend-item"><span class="legend-dot" style="background:var(--color-suite)"></span> Suite</span>
+            </div>
+            <div id="floor-plan-container"></div>
+        </section>
+
+        <!-- SECTION: Summary Table (hidden until generated) -->
+        <section id="section-summary" class="hidden">
+            <h2>Room Summary</h2>
+            <table id="summary-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Count</th>
+                        <th>Mix</th>
+                        <th>Guests/Room</th>
+                        <th>Total Guests</th>
+                        <th>Area/Room (m²)</th>
+                        <th>Total Area (m²)</th>
+                    </tr>
+                </thead>
+                <tbody id="summary-tbody"></tbody>
+                <tfoot id="summary-tfoot"></tfoot>
+            </table>
+        </section>
+
+        <!-- SECTION: Export (hidden until generated) -->
+        <section id="section-export" class="hidden">
+            <h2>Export</h2>
+            <button id="btn-export" onclick="exportJSON()">Download JSON Config</button>
+        </section>
+    </div>
+
+    <script>
+        const ROOM_TYPES = [
+            { key: 'single',      label: 'Single',       cssClass: 'room-single',       guests: 1, area: 22 },
+            { key: 'double',      label: 'Double',       cssClass: 'room-double',       guests: 2, area: 30 },
+            { key: 'juniorSuite', label: 'Junior Suite', cssClass: 'room-junior-suite', guests: 2, area: 45 },
+            { key: 'suite',       label: 'Suite',        cssClass: 'room-suite',        guests: 4, area: 65 },
+        ];
+
+        const SLIDER_MAP = [
+            { sliderId: 'slider-single',       pctId: 'pct-single',       key: 'single'      },
+            { sliderId: 'slider-double',       pctId: 'pct-double',       key: 'double'      },
+            { sliderId: 'slider-junior-suite', pctId: 'pct-junior-suite', key: 'juniorSuite' },
+            { sliderId: 'slider-suite',        pctId: 'pct-suite',        key: 'suite'       },
+        ];
+
+        const STATE = {
+            floors: 10,
+            roomsPerFloor: 10,
+            percentages: { single: 40, double: 30, juniorSuite: 20, suite: 10 },
+            computed: null,
+        };
+
+        function init() {
+            SLIDER_MAP.forEach(({ sliderId, key }) => {
+                document.getElementById(sliderId).addEventListener('input', function () {
+                    onSliderChange(key, parseInt(this.value, 10));
+                });
+            });
+            document.getElementById('input-floors').addEventListener('input', function () {
+                STATE.floors = Math.max(1, parseInt(this.value, 10) || 1);
+                updateDerivedTotal();
+            });
+            document.getElementById('input-rooms-per-floor').addEventListener('input', function () {
+                STATE.roomsPerFloor = Math.max(1, parseInt(this.value, 10) || 1);
+                updateDerivedTotal();
+            });
+            updateSliderDisplay();
+            updateDerivedTotal();
+        }
+
+        function readInputs() {
+            STATE.floors = Math.max(1, parseInt(document.getElementById('input-floors').value, 10) || 1);
+            STATE.roomsPerFloor = Math.max(1, parseInt(document.getElementById('input-rooms-per-floor').value, 10) || 1);
+        }
+
+        function updateDerivedTotal() {
+            document.getElementById('derived-total-rooms').textContent = (STATE.floors * STATE.roomsPerFloor).toLocaleString();
+        }
+
+        function onSliderChange(changedKey, newValue) {
+            newValue = Math.min(100, Math.max(0, newValue));
+            balanceSliders(changedKey, newValue);
+            updateSliderDisplay();
+            validatePercentages();
+        }
+
+        function balanceSliders(changedKey, newValue) {
+            const remaining = 100 - newValue;
+            const others = ROOM_TYPES.map(rt => rt.key).filter(k => k !== changedKey);
+            const othersSum = others.reduce((s, k) => s + STATE.percentages[k], 0);
+            if (othersSum === 0) {
+                const base = Math.floor(remaining / others.length);
+                const leftover = remaining - base * others.length;
+                others.forEach((k, i) => { STATE.percentages[k] = base + (i === others.length - 1 ? leftover : 0); });
+            } else {
+                let assigned = 0;
+                others.forEach((k, i) => {
+                    if (i < others.length - 1) {
+                        const val = Math.round((STATE.percentages[k] / othersSum) * remaining);
+                        STATE.percentages[k] = val;
+                        assigned += val;
+                    } else {
+                        STATE.percentages[k] = remaining - assigned;
+                    }
+                });
+            }
+            STATE.percentages[changedKey] = newValue;
+        }
+
+        function updateSliderDisplay() {
+            SLIDER_MAP.forEach(({ sliderId, pctId, key }) => {
+                document.getElementById(sliderId).value = STATE.percentages[key];
+                document.getElementById(pctId).textContent = STATE.percentages[key] + '%';
+            });
+            document.getElementById('pct-total').textContent = Object.values(STATE.percentages).reduce((s, v) => s + v, 0);
+        }
+
+        function validatePercentages() {
+            const valid = Object.values(STATE.percentages).reduce((s, v) => s + v, 0) === 100;
+            document.getElementById('pct-warning').classList.toggle('hidden', valid);
+            document.getElementById('btn-generate').disabled = !valid;
+            return valid;
+        }
+
+        function computeCounts(totalRooms) {
+            const counts = {};
+            let assigned = 0;
+            ROOM_TYPES.forEach((rt, i) => {
+                if (i < ROOM_TYPES.length - 1) {
+                    const val = Math.round(totalRooms * STATE.percentages[rt.key] / 100);
+                    counts[rt.key] = val; assigned += val;
+                } else { counts[rt.key] = totalRooms - assigned; }
+            });
+            return counts;
+        }
+
+        function buildRoomSequence(counts) {
+            const seq = [];
+            ROOM_TYPES.forEach(rt => { for (let i = 0; i < counts[rt.key]; i++) seq.push(rt.key); });
+            return seq;
+        }
+
+        function buildFloorGrid(seq, floors, rpf) {
+            const grid = [];
+            for (let f = 0; f < floors; f++) {
+                const slice = seq.slice(f * rpf, (f + 1) * rpf);
+                while (slice.length < rpf) slice.push(null);
+                grid.push(slice);
+            }
+            return grid;
+        }
+
+        function computeConfig() {
+            const { floors, roomsPerFloor } = STATE;
+            const totalRooms = floors * roomsPerFloor;
+            const counts = computeCounts(totalRooms);
+            const roomTypeStats = ROOM_TYPES.map(rt => ({
+                key: rt.key, label: rt.label, count: counts[rt.key],
+                percentage: STATE.percentages[rt.key], guestsPerRoom: rt.guests,
+                totalGuests: counts[rt.key] * rt.guests, areaPerRoom: rt.area,
+                totalArea: counts[rt.key] * rt.area,
+            }));
+            const totalGuests = roomTypeStats.reduce((s, r) => s + r.totalGuests, 0);
+            const totalArea   = roomTypeStats.reduce((s, r) => s + r.totalArea, 0);
+            const avgRoomSize = totalRooms > 0 ? Math.round(totalArea / totalRooms) : 0;
+            const roomSequence = buildRoomSequence(counts);
+            const floorGrid = buildFloorGrid(roomSequence, floors, roomsPerFloor);
+            return { totalRooms, floors, roomsPerFloor, counts, roomTypeStats, totalGuests, totalArea, avgRoomSize, floorGrid };
+        }
+
+        function renderMetrics(c) {
+            document.getElementById('m-total-keys').textContent   = c.totalRooms.toLocaleString();
+            document.getElementById('m-total-guests').textContent = c.totalGuests.toLocaleString();
+            document.getElementById('m-total-area').textContent   = c.totalArea.toLocaleString();
+            document.getElementById('m-avg-size').textContent     = c.avgRoomSize;
+        }
+
+        function renderFloorPlan(c) {
+            const container = document.getElementById('floor-plan-container');
+            container.innerHTML = '';
+            const typeMap = {};
+            ROOM_TYPES.forEach(rt => { typeMap[rt.key] = rt; });
+            for (let f = c.floors - 1; f >= 0; f--) {
+                const row = document.createElement('div');
+                row.className = 'floor-row';
+                const lbl = document.createElement('span');
+                lbl.className = 'floor-label';
+                lbl.textContent = 'Floor ' + (f + 1);
+                row.appendChild(lbl);
+                c.floorGrid[f].forEach(roomKey => {
+                    const cell = document.createElement('div');
+                    cell.className = 'room-cell ' + (roomKey ? typeMap[roomKey].cssClass : 'room-empty');
+                    if (roomKey) cell.title = typeMap[roomKey].label;
+                    row.appendChild(cell);
+                });
+                container.appendChild(row);
+            }
+        }
+
+        function renderSummaryTable(c) {
+            const tbody = document.getElementById('summary-tbody');
+            const tfoot = document.getElementById('summary-tfoot');
+            tbody.innerHTML = ''; tfoot.innerHTML = '';
+            c.roomTypeStats.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><span class="type-chip">
+                        <span class="legend-dot" style="background:var(--color-${r.key === 'juniorSuite' ? 'junior-suite' : r.key})"></span>
+                        ${r.label}</span></td>
+                    <td>${r.count.toLocaleString()}</td><td>${r.percentage}%</td>
+                    <td>${r.guestsPerRoom}</td><td>${r.totalGuests.toLocaleString()}</td>
+                    <td>${r.areaPerRoom}</td><td>${r.totalArea.toLocaleString()}</td>`;
+                tbody.appendChild(tr);
+            });
+            const footTr = document.createElement('tr');
+            footTr.innerHTML = `<td>Total</td><td>${c.totalRooms.toLocaleString()}</td><td>100%</td>
+                <td>—</td><td>${c.totalGuests.toLocaleString()}</td>
+                <td>${c.avgRoomSize} avg</td><td>${c.totalArea.toLocaleString()}</td>`;
+            tfoot.appendChild(footTr);
+        }
+
+        function showSections() {
+            ['section-metrics', 'section-floorplan', 'section-summary', 'section-export'].forEach(id => {
+                document.getElementById(id).classList.remove('hidden');
+            });
+        }
+
+        function generate() {
+            readInputs();
+            if (!validatePercentages()) return;
+            STATE.computed = computeConfig();
+            renderMetrics(STATE.computed);
+            renderFloorPlan(STATE.computed);
+            renderSummaryTable(STATE.computed);
+            showSections();
+        }
+
+        function exportJSON() {
+            const c = STATE.computed;
+            const payload = {
+                meta: { generatedAt: new Date().toISOString(), tool: 'Hotel Room Configurator' },
+                inputs: { heightLimitFloors: STATE.floors, roomsPerFloor: STATE.roomsPerFloor, totalKeys: c.totalRooms, roomTypeMix: { ...STATE.percentages } },
+                metrics: { totalKeys: c.totalRooms, maxGuests: c.totalGuests, totalAreaM2: c.totalArea, avgRoomSizeM2: c.avgRoomSize },
+                roomTypes: c.roomTypeStats.map(r => ({
+                    type: r.label, count: r.count, mixPercentage: r.percentage,
+                    guestsPerRoom: r.guestsPerRoom, totalGuests: r.totalGuests,
+                    areaPerRoomM2: r.areaPerRoom, totalAreaM2: r.totalArea
+                }))
+            };
+            const a = document.createElement('a');
+            a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(payload, null, 2));
+            a.download = 'hotel-config.json';
+            a.click();
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
