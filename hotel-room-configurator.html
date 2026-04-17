@@ -29,250 +29,56 @@
             margin: 0 auto;
         }
 
-        h1 {
-            margin: 0 0 24px 0;
-            font-size: 22px;
-            color: #1f2937;
-        }
+        h1 { margin: 0 0 24px 0; font-size: 22px; color: #1f2937; }
+        h2 { font-size: 16px; color: #374151; margin: 24px 0 12px 0; padding-bottom: 6px; border-bottom: 1px solid #e5e7eb; }
 
-        h2 {
-            font-size: 16px;
-            color: #374151;
-            margin: 24px 0 12px 0;
-            padding-bottom: 6px;
-            border-bottom: 1px solid #e5e7eb;
-        }
+        .input-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .input-row label { min-width: 150px; font-size: 14px; color: #374151; }
+        .input-row input[type="number"] { width: 90px; padding: 6px 10px; font-size: 15px; border: 1px solid #d1d5db; border-radius: 4px; }
 
-        .input-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 10px;
-        }
+        .derived-display { font-size: 14px; color: #6b7280; margin: 6px 0 14px 0; }
+        .derived-display strong { color: #1f2937; font-size: 16px; }
 
-        .input-row label {
-            min-width: 150px;
-            font-size: 14px;
-            color: #374151;
-        }
+        .slider-section-label { font-size: 14px; color: #374151; margin: 14px 0 8px 0; font-weight: bold; }
+        .slider-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .slider-row label { min-width: 120px; font-size: 14px; color: #374151; display: flex; align-items: center; gap: 6px; }
+        .slider-row input[type="range"] { flex: 1; cursor: pointer; }
+        .pct-display { min-width: 40px; text-align: right; font-weight: bold; font-size: 14px; color: #1f2937; }
 
-        .input-row input[type="number"] {
-            width: 90px;
-            padding: 6px 10px;
-            font-size: 15px;
-            border: 1px solid #d1d5db;
-            border-radius: 4px;
-        }
+        .legend-dot { width: 12px; height: 12px; border-radius: 2px; display: inline-block; flex-shrink: 0; }
 
-        .derived-display {
-            font-size: 14px;
-            color: #6b7280;
-            margin: 6px 0 14px 0;
-        }
+        #pct-total-display { font-size: 13px; color: #6b7280; margin: 4px 0 6px 0; }
+        #pct-warning { color: #dc2626; font-size: 13px; margin: 2px 0 6px 0; }
 
-        .derived-display strong {
-            color: #1f2937;
-            font-size: 16px;
-        }
+        button { padding: 10px 22px; font-size: 15px; cursor: pointer; background: #1f2937; color: white; border: none; border-radius: 4px; margin-top: 8px; }
+        button:hover:not(:disabled) { background: #374151; }
+        button:disabled { background: #9ca3af; cursor: not-allowed; }
+        #btn-export { background: #065f46; margin-top: 4px; }
+        #btn-export:hover { background: #047857; }
 
-        .slider-section-label {
-            font-size: 14px;
-            color: #374151;
-            margin: 14px 0 8px 0;
-            font-weight: bold;
-        }
+        #metrics-grid { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+        .metric-card { flex: 1 1 150px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 14px 16px; text-align: center; }
+        .metric-value { font-size: 26px; font-weight: bold; color: #1f2937; }
+        .metric-label { font-size: 12px; color: #6b7280; margin-top: 4px; }
+        .metric-sublabel { font-size: 11px; color: #9ca3af; margin-top: 2px; }
 
-        .slider-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-
-        .slider-row label {
-            min-width: 120px;
-            font-size: 14px;
-            color: #374151;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .slider-row input[type="range"] {
-            flex: 1;
-            cursor: pointer;
-        }
-
-        .pct-display {
-            min-width: 40px;
-            text-align: right;
-            font-weight: bold;
-            font-size: 14px;
-            color: #1f2937;
-        }
-
-        .legend-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
-            display: inline-block;
-            flex-shrink: 0;
-        }
-
-        #pct-total-display {
-            font-size: 13px;
-            color: #6b7280;
-            margin: 4px 0 6px 0;
-        }
-
-        #pct-warning {
-            color: #dc2626;
-            font-size: 13px;
-            margin: 2px 0 6px 0;
-        }
-
-        button {
-            padding: 10px 22px;
-            font-size: 15px;
-            cursor: pointer;
-            background: #1f2937;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            margin-top: 8px;
-        }
-
-        button:hover:not(:disabled) {
-            background: #374151;
-        }
-
-        button:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
-        }
-
-        #btn-export {
-            background: #065f46;
-            margin-top: 4px;
-        }
-
-        #btn-export:hover {
-            background: #047857;
-        }
-
-        #metrics-grid {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-            margin-bottom: 8px;
-        }
-
-        .metric-card {
-            flex: 1 1 150px;
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 6px;
-            padding: 14px 16px;
-            text-align: center;
-        }
-
-        .metric-value {
-            font-size: 26px;
-            font-weight: bold;
-            color: #1f2937;
-        }
-
-        .metric-label {
-            font-size: 12px;
-            color: #6b7280;
-            margin-top: 4px;
-        }
-
-        .metric-sublabel {
-            font-size: 11px;
-            color: #9ca3af;
-            margin-top: 2px;
-        }
-
-        #floor-plan-legend {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-            font-size: 13px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #374151;
-        }
-
-        #floor-plan-container {
-            overflow-x: auto;
-            padding-bottom: 8px;
-        }
-
-        .floor-row {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            margin-bottom: 3px;
-        }
-
-        .floor-label {
-            min-width: 64px;
-            font-size: 11px;
-            color: #9ca3af;
-            text-align: right;
-            padding-right: 8px;
-            flex-shrink: 0;
-        }
-
-        .room-cell {
-            width: 18px;
-            height: 18px;
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
-
+        #floor-plan-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; font-size: 13px; }
+        .legend-item { display: flex; align-items: center; gap: 6px; color: #374151; }
+        #floor-plan-container { overflow-x: auto; padding-bottom: 8px; }
+        .floor-row { display: flex; align-items: center; gap: 3px; margin-bottom: 3px; }
+        .floor-label { min-width: 64px; font-size: 11px; color: #9ca3af; text-align: right; padding-right: 8px; flex-shrink: 0; }
+        .room-cell { width: 18px; height: 18px; border-radius: 2px; flex-shrink: 0; }
         .room-single       { background-color: var(--color-single); }
         .room-double       { background-color: var(--color-double); }
         .room-junior-suite { background-color: var(--color-junior-suite); }
         .room-suite        { background-color: var(--color-suite); }
         .room-empty        { background-color: var(--color-empty); }
 
-        #summary-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-
-        #summary-table th,
-        #summary-table td {
-            text-align: left;
-            padding: 8px 12px;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        #summary-table thead th {
-            background: #f9fafb;
-            font-weight: 600;
-            color: #374151;
-        }
-
-        #summary-table tfoot td {
-            font-weight: bold;
-            background: #f3f4f6;
-            border-top: 2px solid #d1d5db;
-        }
-
-        .type-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
+        #summary-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        #summary-table th, #summary-table td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #e5e7eb; }
+        #summary-table thead th { background: #f9fafb; font-weight: 600; color: #374151; }
+        #summary-table tfoot td { font-weight: bold; background: #f3f4f6; border-top: 2px solid #d1d5db; }
+        .type-chip { display: inline-flex; align-items: center; gap: 6px; }
 
         .hidden { display: none !important; }
         section { margin-bottom: 8px; }
@@ -292,9 +98,7 @@
                 <label for="input-rooms-per-floor">Rooms per floor</label>
                 <input type="number" id="input-rooms-per-floor" min="1" max="200" value="10">
             </div>
-            <div class="derived-display">
-                Total keys: <strong id="derived-total-rooms">100</strong>
-            </div>
+            <div class="derived-display">Total keys: <strong id="derived-total-rooms">100</strong></div>
             <div class="slider-section-label">Room type mix</div>
             <div class="slider-row">
                 <label for="slider-single"><span class="legend-dot" style="background:var(--color-single)"></span>Single</label>
@@ -342,7 +146,7 @@
                 </div>
                 <div class="metric-card">
                     <div class="metric-value" id="m-area-per-floor-m2"></div>
-                    <div class="metric-label">Area / Floor (m²)</div>
+                    <div class="metric-label">Gross Area / Floor (m²)</div>
                     <div class="metric-sublabel" id="m-area-per-floor-ft2"></div>
                 </div>
             </div>
@@ -514,11 +318,12 @@
             const totalGuests = roomTypeStats.reduce((s, r) => s + r.totalGuests, 0);
             const totalArea   = roomTypeStats.reduce((s, r) => s + r.totalArea, 0);
             const avgRoomSize = totalRooms > 0 ? Math.round(totalArea / totalRooms) : 0;
-            const areaPerFloorM2  = floors > 0 ? Math.round(totalArea / floors) : 0;
-            const areaPerFloorFt2 = Math.round(areaPerFloorM2 * 10.764);
+            const netAreaPerFloorM2   = floors > 0 ? Math.round(totalArea / floors) : 0;
+            const grossAreaPerFloorM2  = Math.round(netAreaPerFloorM2 * 1.35);
+            const grossAreaPerFloorFt2 = Math.round(grossAreaPerFloorM2 * 10.764);
             const roomSequence = buildRoomSequence(counts);
             const floorGrid = buildFloorGrid(roomSequence, floors, roomsPerFloor);
-            return { totalRooms, floors, roomsPerFloor, counts, roomTypeStats, totalGuests, totalArea, avgRoomSize, areaPerFloorM2, areaPerFloorFt2, roomSequence, floorGrid };
+            return { totalRooms, floors, roomsPerFloor, counts, roomTypeStats, totalGuests, totalArea, avgRoomSize, netAreaPerFloorM2, grossAreaPerFloorM2, grossAreaPerFloorFt2, roomSequence, floorGrid };
         }
 
         function renderMetrics(c) {
@@ -526,8 +331,8 @@
             document.getElementById('m-total-guests').textContent       = c.totalGuests.toLocaleString();
             document.getElementById('m-total-area').textContent         = c.totalArea.toLocaleString();
             document.getElementById('m-avg-size').textContent           = c.avgRoomSize;
-            document.getElementById('m-area-per-floor-m2').textContent  = c.areaPerFloorM2.toLocaleString();
-            document.getElementById('m-area-per-floor-ft2').textContent = c.areaPerFloorFt2.toLocaleString() + ' ft²';
+            document.getElementById('m-area-per-floor-m2').textContent  = c.grossAreaPerFloorM2.toLocaleString();
+            document.getElementById('m-area-per-floor-ft2').textContent = c.grossAreaPerFloorFt2.toLocaleString() + ' ft²  ·  incl. 35% circulation';
         }
 
         function renderFloorPlan(c) {
@@ -595,7 +400,14 @@
             const payload = {
                 meta: { generatedAt: new Date().toISOString(), tool: 'Hotel Room Configurator' },
                 inputs: { heightLimitFloors: STATE.floors, roomsPerFloor: STATE.roomsPerFloor, totalKeys: c.totalRooms, roomTypeMix: { ...STATE.percentages } },
-                metrics: { totalKeys: c.totalRooms, maxGuests: c.totalGuests, totalAreaM2: c.totalArea, avgRoomSizeM2: c.avgRoomSize, areaPerFloorM2: c.areaPerFloorM2, areaPerFloorFt2: c.areaPerFloorFt2 },
+                metrics: {
+                    totalKeys: c.totalRooms, maxGuests: c.totalGuests,
+                    totalAreaM2: c.totalArea, avgRoomSizeM2: c.avgRoomSize,
+                    netAreaPerFloorM2: c.netAreaPerFloorM2,
+                    grossAreaPerFloorM2: c.grossAreaPerFloorM2,
+                    grossAreaPerFloorFt2: c.grossAreaPerFloorFt2,
+                    circulationAllowance: '35%'
+                },
                 roomTypes: c.roomTypeStats.map(r => ({
                     type: r.label, count: r.count, mixPercentage: r.percentage,
                     guestsPerRoom: r.guestsPerRoom, totalGuests: r.totalGuests,
