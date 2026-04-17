@@ -192,7 +192,7 @@
             margin-top: 4px;
         }
 
-        /* --- Floor Plan --- */
+        /* --- Section / Elevation --- */
         #floor-plan-legend {
             display: flex;
             gap: 16px;
@@ -339,7 +339,7 @@
             <div id="pct-total-display">Total: <strong id="pct-total">100</strong>%</div>
             <div id="pct-warning" class="hidden">Percentages must sum to 100%</div>
 
-            <button id="btn-generate" onclick="generate()">Generate Floor Plan</button>
+            <button id="btn-generate" onclick="generate()">Generate</button>
         </section>
 
         <!-- SECTION: Metrics (hidden until generated) -->
@@ -365,9 +365,9 @@
             </div>
         </section>
 
-        <!-- SECTION: Floor Plan (hidden until generated) -->
+        <!-- SECTION: Elevation (hidden until generated) -->
         <section id="section-floorplan" class="hidden">
-            <h2>Visual Floor Plan</h2>
+            <h2>Diagrammatic Section / Elevation</h2>
             <div id="floor-plan-legend">
                 <span class="legend-item"><span class="legend-dot" style="background:var(--color-single)"></span> Single</span>
                 <span class="legend-item"><span class="legend-dot" style="background:var(--color-double)"></span> Double</span>
