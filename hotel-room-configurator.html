@@ -306,6 +306,10 @@
                 <label for="input-adr">Avg daily rate (USD)</label>
                 <input type="number" id="input-adr" min="0" step="1" value="150">
             </div>
+            <div class="input-row">
+                <label for="input-occupancy">Occupancy (%)</label>
+                <input type="number" id="input-occupancy" min="0" max="100" step="1" value="70">
+            </div>
 
             <div class="derived-display">
                 Total keys: <strong id="derived-total-rooms">100</strong>
@@ -380,7 +384,7 @@
                 <div class="metric-card">
                     <div class="metric-value" id="m-daily-revenue"></div>
                     <div class="metric-label">Daily Revenue (USD)</div>
-                    <div class="metric-sublabel">100% occupancy</div>
+                    <div class="metric-sublabel" id="m-daily-revenue-occ"></div>
                 </div>
             </div>
         </section>
@@ -447,6 +451,7 @@
             floors: 10,
             roomsPerFloor: 10,
             adr: 150,
+            occupancy: 70,
             percentages: { single: 40, double: 30, juniorSuite: 20, suite: 10 },
             computed: null,
         };
@@ -472,6 +477,9 @@
             document.getElementById('input-adr').addEventListener('input', function () {
                 STATE.adr = Math.max(0, parseFloat(this.value) || 0);
             });
+            document.getElementById('input-occupancy').addEventListener('input', function () {
+                STATE.occupancy = Math.min(100, Math.max(0, parseFloat(this.value) || 0));
+            });
 
             updateSliderDisplay();
             updateDerivedTotal();
@@ -483,6 +491,7 @@
             STATE.floors = Math.max(1, parseInt(document.getElementById('input-floors').value, 10) || 1);
             STATE.roomsPerFloor = Math.max(1, parseInt(document.getElementById('input-rooms-per-floor').value, 10) || 1);
             STATE.adr = Math.max(0, parseFloat(document.getElementById('input-adr').value) || 0);
+            STATE.occupancy = Math.min(100, Math.max(0, parseFloat(document.getElementById('input-occupancy').value) || 0));
         }
 
         function updateDerivedTotal() {
@@ -606,7 +615,7 @@
             const netAreaPerFloorM2   = floors > 0 ? Math.round(totalArea / floors) : 0;
             const grossAreaPerFloorM2  = Math.round(netAreaPerFloorM2 * 1.35);
             const grossAreaPerFloorFt2 = Math.round(grossAreaPerFloorM2 * 10.764);
-            const dailyRevenue = Math.round(STATE.adr * totalRooms);
+            const dailyRevenue = Math.round(STATE.adr * totalRooms * (STATE.occupancy / 100));
             return { totalRooms, floors, roomsPerFloor, counts, roomTypeStats, totalGuests, totalArea, avgRoomSize, netAreaPerFloorM2, grossAreaPerFloorM2, grossAreaPerFloorFt2, dailyRevenue, roomSequence, floorGrid };
         }
 
@@ -619,7 +628,8 @@
             document.getElementById('m-avg-size').textContent            = c.avgRoomSize;
             document.getElementById('m-area-per-floor-m2').textContent  = c.grossAreaPerFloorM2.toLocaleString();
             document.getElementById('m-area-per-floor-ft2').textContent = c.grossAreaPerFloorFt2.toLocaleString() + ' ft²  ·  incl. 35% circulation';
-            document.getElementById('m-daily-revenue').textContent      = '$' + c.dailyRevenue.toLocaleString();
+            document.getElementById('m-daily-revenue').textContent         = '$' + c.dailyRevenue.toLocaleString();
+            document.getElementById('m-daily-revenue-occ').textContent    = STATE.occupancy + '% occupancy';
         }
 
         function renderFloorPlan(c) {
