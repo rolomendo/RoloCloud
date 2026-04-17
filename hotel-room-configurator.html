@@ -13,21 +13,9 @@
             --color-empty: #e5e7eb;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 40px 20px;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 40px 20px; }
 
-        #configurator {
-            background: white;
-            padding: 30px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            max-width: 900px;
-            margin: 0 auto;
-        }
+        #configurator { background: white; padding: 30px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 900px; margin: 0 auto; }
 
         h1 { margin: 0 0 24px 0; font-size: 22px; color: #1f2937; }
         h2 { font-size: 16px; color: #374151; margin: 24px 0 12px 0; padding-bottom: 6px; border-bottom: 1px solid #e5e7eb; }
@@ -98,6 +86,10 @@
                 <label for="input-rooms-per-floor">Rooms per floor</label>
                 <input type="number" id="input-rooms-per-floor" min="1" max="200" value="10">
             </div>
+            <div class="input-row">
+                <label for="input-adr">Avg daily rate (USD)</label>
+                <input type="number" id="input-adr" min="0" step="1" value="150">
+            </div>
             <div class="derived-display">Total keys: <strong id="derived-total-rooms">100</strong></div>
             <div class="slider-section-label">Room type mix</div>
             <div class="slider-row">
@@ -148,6 +140,11 @@
                     <div class="metric-value" id="m-area-per-floor-m2"></div>
                     <div class="metric-label">Gross Area / Floor (m²)</div>
                     <div class="metric-sublabel" id="m-area-per-floor-ft2"></div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="m-daily-revenue"></div>
+                    <div class="metric-label">Daily Revenue (USD)</div>
+                    <div class="metric-sublabel">100% occupancy</div>
                 </div>
             </div>
         </section>
@@ -202,6 +199,7 @@
         const STATE = {
             floors: 10,
             roomsPerFloor: 10,
+            adr: 150,
             percentages: { single: 40, double: 30, juniorSuite: 20, suite: 10 },
             computed: null,
         };
@@ -220,6 +218,9 @@
                 STATE.roomsPerFloor = Math.max(1, parseInt(this.value, 10) || 1);
                 updateDerivedTotal();
             });
+            document.getElementById('input-adr').addEventListener('input', function () {
+                STATE.adr = Math.max(0, parseFloat(this.value) || 0);
+            });
             updateSliderDisplay();
             updateDerivedTotal();
         }
@@ -227,6 +228,7 @@
         function readInputs() {
             STATE.floors = Math.max(1, parseInt(document.getElementById('input-floors').value, 10) || 1);
             STATE.roomsPerFloor = Math.max(1, parseInt(document.getElementById('input-rooms-per-floor').value, 10) || 1);
+            STATE.adr = Math.max(0, parseFloat(document.getElementById('input-adr').value) || 0);
         }
 
         function updateDerivedTotal() {
@@ -321,9 +323,10 @@
             const netAreaPerFloorM2   = floors > 0 ? Math.round(totalArea / floors) : 0;
             const grossAreaPerFloorM2  = Math.round(netAreaPerFloorM2 * 1.35);
             const grossAreaPerFloorFt2 = Math.round(grossAreaPerFloorM2 * 10.764);
+            const dailyRevenue = Math.round(STATE.adr * totalRooms);
             const roomSequence = buildRoomSequence(counts);
             const floorGrid = buildFloorGrid(roomSequence, floors, roomsPerFloor);
-            return { totalRooms, floors, roomsPerFloor, counts, roomTypeStats, totalGuests, totalArea, avgRoomSize, netAreaPerFloorM2, grossAreaPerFloorM2, grossAreaPerFloorFt2, roomSequence, floorGrid };
+            return { totalRooms, floors, roomsPerFloor, counts, roomTypeStats, totalGuests, totalArea, avgRoomSize, netAreaPerFloorM2, grossAreaPerFloorM2, grossAreaPerFloorFt2, dailyRevenue, roomSequence, floorGrid };
         }
 
         function renderMetrics(c) {
@@ -333,6 +336,7 @@
             document.getElementById('m-avg-size').textContent           = c.avgRoomSize;
             document.getElementById('m-area-per-floor-m2').textContent  = c.grossAreaPerFloorM2.toLocaleString();
             document.getElementById('m-area-per-floor-ft2').textContent = c.grossAreaPerFloorFt2.toLocaleString() + ' ft²  ·  incl. 35% circulation';
+            document.getElementById('m-daily-revenue').textContent      = '$' + c.dailyRevenue.toLocaleString();
         }
 
         function renderFloorPlan(c) {
@@ -399,14 +403,16 @@
             const c = STATE.computed;
             const payload = {
                 meta: { generatedAt: new Date().toISOString(), tool: 'Hotel Room Configurator' },
-                inputs: { heightLimitFloors: STATE.floors, roomsPerFloor: STATE.roomsPerFloor, totalKeys: c.totalRooms, roomTypeMix: { ...STATE.percentages } },
+                inputs: { heightLimitFloors: STATE.floors, roomsPerFloor: STATE.roomsPerFloor, avgDailyRateUSD: STATE.adr, totalKeys: c.totalRooms, roomTypeMix: { ...STATE.percentages } },
                 metrics: {
                     totalKeys: c.totalRooms, maxGuests: c.totalGuests,
                     totalAreaM2: c.totalArea, avgRoomSizeM2: c.avgRoomSize,
                     netAreaPerFloorM2: c.netAreaPerFloorM2,
                     grossAreaPerFloorM2: c.grossAreaPerFloorM2,
                     grossAreaPerFloorFt2: c.grossAreaPerFloorFt2,
-                    circulationAllowance: '35%'
+                    circulationAllowance: '35%',
+                    dailyRevenueUSD: c.dailyRevenue,
+                    dailyRevenueNote: '100% occupancy'
                 },
                 roomTypes: c.roomTypeStats.map(r => ({
                     type: r.label, count: r.count, mixPercentage: r.percentage,
