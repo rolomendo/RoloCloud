@@ -43,7 +43,6 @@
             border-bottom: 1px solid #e5e7eb;
         }
 
-        /* --- Inputs --- */
         .input-row {
             display: flex;
             align-items: center;
@@ -76,7 +75,6 @@
             font-size: 16px;
         }
 
-        /* --- Sliders --- */
         .slider-section-label {
             font-size: 14px;
             color: #374151;
@@ -133,7 +131,6 @@
             margin: 2px 0 6px 0;
         }
 
-        /* --- Generate Button --- */
         button {
             padding: 10px 22px;
             font-size: 15px;
@@ -163,7 +160,6 @@
             background: #047857;
         }
 
-        /* --- Metric Cards --- */
         #metrics-grid {
             display: flex;
             gap: 14px;
@@ -192,7 +188,12 @@
             margin-top: 4px;
         }
 
-        /* --- Section / Elevation --- */
+        .metric-sublabel {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 2px;
+        }
+
         #floor-plan-legend {
             display: flex;
             gap: 16px;
@@ -242,7 +243,6 @@
         .room-suite        { background-color: var(--color-suite); }
         .room-empty        { background-color: var(--color-empty); }
 
-        /* --- Summary Table --- */
         #summary-table {
             width: 100%;
             border-collapse: collapse;
@@ -274,9 +274,7 @@
             gap: 6px;
         }
 
-        /* --- Utilities --- */
         .hidden { display: none !important; }
-
         section { margin-bottom: 8px; }
     </style>
 </head>
@@ -284,10 +282,8 @@
     <div id="configurator">
         <h1>Hotel Room Configurator</h1>
 
-        <!-- SECTION: Inputs -->
         <section id="section-inputs">
             <h2>Configuration</h2>
-
             <div class="input-row">
                 <label for="input-floors">Height limit (floors)</label>
                 <input type="number" id="input-floors" min="1" max="200" value="10">
@@ -296,53 +292,35 @@
                 <label for="input-rooms-per-floor">Rooms per floor</label>
                 <input type="number" id="input-rooms-per-floor" min="1" max="200" value="10">
             </div>
-
             <div class="derived-display">
                 Total keys: <strong id="derived-total-rooms">100</strong>
             </div>
-
             <div class="slider-section-label">Room type mix</div>
-
             <div class="slider-row">
-                <label for="slider-single">
-                    <span class="legend-dot" style="background:var(--color-single)"></span>
-                    Single
-                </label>
+                <label for="slider-single"><span class="legend-dot" style="background:var(--color-single)"></span>Single</label>
                 <input type="range" id="slider-single" min="0" max="100" value="40">
                 <span class="pct-display" id="pct-single">40%</span>
             </div>
             <div class="slider-row">
-                <label for="slider-double">
-                    <span class="legend-dot" style="background:var(--color-double)"></span>
-                    Double
-                </label>
+                <label for="slider-double"><span class="legend-dot" style="background:var(--color-double)"></span>Double</label>
                 <input type="range" id="slider-double" min="0" max="100" value="30">
                 <span class="pct-display" id="pct-double">30%</span>
             </div>
             <div class="slider-row">
-                <label for="slider-junior-suite">
-                    <span class="legend-dot" style="background:var(--color-junior-suite)"></span>
-                    Junior Suite
-                </label>
+                <label for="slider-junior-suite"><span class="legend-dot" style="background:var(--color-junior-suite)"></span>Junior Suite</label>
                 <input type="range" id="slider-junior-suite" min="0" max="100" value="20">
                 <span class="pct-display" id="pct-junior-suite">20%</span>
             </div>
             <div class="slider-row">
-                <label for="slider-suite">
-                    <span class="legend-dot" style="background:var(--color-suite)"></span>
-                    Suite
-                </label>
+                <label for="slider-suite"><span class="legend-dot" style="background:var(--color-suite)"></span>Suite</label>
                 <input type="range" id="slider-suite" min="0" max="100" value="10">
                 <span class="pct-display" id="pct-suite">10%</span>
             </div>
-
             <div id="pct-total-display">Total: <strong id="pct-total">100</strong>%</div>
             <div id="pct-warning" class="hidden">Percentages must sum to 100%</div>
-
             <button id="btn-generate" onclick="generate()">Generate</button>
         </section>
 
-        <!-- SECTION: Metrics (hidden until generated) -->
         <section id="section-metrics" class="hidden">
             <h2>Capacity Metrics</h2>
             <div id="metrics-grid">
@@ -362,10 +340,14 @@
                     <div class="metric-value" id="m-avg-size"></div>
                     <div class="metric-label">Avg Room Size (m²)</div>
                 </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="m-area-per-floor-m2"></div>
+                    <div class="metric-label">Area / Floor (m²)</div>
+                    <div class="metric-sublabel" id="m-area-per-floor-ft2"></div>
+                </div>
             </div>
         </section>
 
-        <!-- SECTION: Elevation (hidden until generated) -->
         <section id="section-floorplan" class="hidden">
             <h2>Diagrammatic Section / Elevation</h2>
             <div id="floor-plan-legend">
@@ -377,19 +359,14 @@
             <div id="floor-plan-container"></div>
         </section>
 
-        <!-- SECTION: Summary Table (hidden until generated) -->
         <section id="section-summary" class="hidden">
             <h2>Room Summary</h2>
             <table id="summary-table">
                 <thead>
                     <tr>
-                        <th>Type</th>
-                        <th>Count</th>
-                        <th>Mix</th>
-                        <th>Guests/Room</th>
-                        <th>Total Guests</th>
-                        <th>Area/Room (m²)</th>
-                        <th>Total Area (m²)</th>
+                        <th>Type</th><th>Count</th><th>Mix</th>
+                        <th>Guests/Room</th><th>Total Guests</th>
+                        <th>Area/Room (m²)</th><th>Total Area (m²)</th>
                     </tr>
                 </thead>
                 <tbody id="summary-tbody"></tbody>
@@ -397,7 +374,6 @@
             </table>
         </section>
 
-        <!-- SECTION: Export (hidden until generated) -->
         <section id="section-export" class="hidden">
             <h2>Export</h2>
             <button id="btn-export" onclick="exportJSON()">Download JSON Config</button>
@@ -473,8 +449,7 @@
                 others.forEach((k, i) => {
                     if (i < others.length - 1) {
                         const val = Math.round((STATE.percentages[k] / othersSum) * remaining);
-                        STATE.percentages[k] = val;
-                        assigned += val;
+                        STATE.percentages[k] = val; assigned += val;
                     } else {
                         STATE.percentages[k] = remaining - assigned;
                     }
@@ -539,16 +514,20 @@
             const totalGuests = roomTypeStats.reduce((s, r) => s + r.totalGuests, 0);
             const totalArea   = roomTypeStats.reduce((s, r) => s + r.totalArea, 0);
             const avgRoomSize = totalRooms > 0 ? Math.round(totalArea / totalRooms) : 0;
+            const areaPerFloorM2  = floors > 0 ? Math.round(totalArea / floors) : 0;
+            const areaPerFloorFt2 = Math.round(areaPerFloorM2 * 10.764);
             const roomSequence = buildRoomSequence(counts);
             const floorGrid = buildFloorGrid(roomSequence, floors, roomsPerFloor);
-            return { totalRooms, floors, roomsPerFloor, counts, roomTypeStats, totalGuests, totalArea, avgRoomSize, floorGrid };
+            return { totalRooms, floors, roomsPerFloor, counts, roomTypeStats, totalGuests, totalArea, avgRoomSize, areaPerFloorM2, areaPerFloorFt2, roomSequence, floorGrid };
         }
 
         function renderMetrics(c) {
-            document.getElementById('m-total-keys').textContent   = c.totalRooms.toLocaleString();
-            document.getElementById('m-total-guests').textContent = c.totalGuests.toLocaleString();
-            document.getElementById('m-total-area').textContent   = c.totalArea.toLocaleString();
-            document.getElementById('m-avg-size').textContent     = c.avgRoomSize;
+            document.getElementById('m-total-keys').textContent         = c.totalRooms.toLocaleString();
+            document.getElementById('m-total-guests').textContent       = c.totalGuests.toLocaleString();
+            document.getElementById('m-total-area').textContent         = c.totalArea.toLocaleString();
+            document.getElementById('m-avg-size').textContent           = c.avgRoomSize;
+            document.getElementById('m-area-per-floor-m2').textContent  = c.areaPerFloorM2.toLocaleString();
+            document.getElementById('m-area-per-floor-ft2').textContent = c.areaPerFloorFt2.toLocaleString() + ' ft²';
         }
 
         function renderFloorPlan(c) {
@@ -616,7 +595,7 @@
             const payload = {
                 meta: { generatedAt: new Date().toISOString(), tool: 'Hotel Room Configurator' },
                 inputs: { heightLimitFloors: STATE.floors, roomsPerFloor: STATE.roomsPerFloor, totalKeys: c.totalRooms, roomTypeMix: { ...STATE.percentages } },
-                metrics: { totalKeys: c.totalRooms, maxGuests: c.totalGuests, totalAreaM2: c.totalArea, avgRoomSizeM2: c.avgRoomSize },
+                metrics: { totalKeys: c.totalRooms, maxGuests: c.totalGuests, totalAreaM2: c.totalArea, avgRoomSizeM2: c.avgRoomSize, areaPerFloorM2: c.areaPerFloorM2, areaPerFloorFt2: c.areaPerFloorFt2 },
                 roomTypes: c.roomTypeStats.map(r => ({
                     type: r.label, count: r.count, mixPercentage: r.percentage,
                     guestsPerRoom: r.guestsPerRoom, totalGuests: r.totalGuests,
