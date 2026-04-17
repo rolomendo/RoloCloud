@@ -370,7 +370,7 @@
                 </div>
                 <div class="metric-card">
                     <div class="metric-value" id="m-area-per-floor-m2"></div>
-                    <div class="metric-label">Area / Floor (m²)</div>
+                    <div class="metric-label">Gross Area / Floor (m²)</div>
                     <div class="metric-sublabel" id="m-area-per-floor-ft2"></div>
                 </div>
             </div>
@@ -589,9 +589,10 @@
             const roomSequence = buildRoomSequence(counts);
             const floorGrid = buildFloorGrid(roomSequence, floors, roomsPerFloor);
 
-            const areaPerFloorM2 = floors > 0 ? Math.round(totalArea / floors) : 0;
-            const areaPerFloorFt2 = Math.round(areaPerFloorM2 * 10.764);
-            return { totalRooms, floors, roomsPerFloor, counts, roomTypeStats, totalGuests, totalArea, avgRoomSize, areaPerFloorM2, areaPerFloorFt2, roomSequence, floorGrid };
+            const netAreaPerFloorM2   = floors > 0 ? Math.round(totalArea / floors) : 0;
+            const grossAreaPerFloorM2  = Math.round(netAreaPerFloorM2 * 1.35);
+            const grossAreaPerFloorFt2 = Math.round(grossAreaPerFloorM2 * 10.764);
+            return { totalRooms, floors, roomsPerFloor, counts, roomTypeStats, totalGuests, totalArea, avgRoomSize, netAreaPerFloorM2, grossAreaPerFloorM2, grossAreaPerFloorFt2, roomSequence, floorGrid };
         }
 
         // ── Rendering ──────────────────────────────────────────────────────────
@@ -601,8 +602,8 @@
             document.getElementById('m-total-guests').textContent        = c.totalGuests.toLocaleString();
             document.getElementById('m-total-area').textContent          = c.totalArea.toLocaleString();
             document.getElementById('m-avg-size').textContent            = c.avgRoomSize;
-            document.getElementById('m-area-per-floor-m2').textContent   = c.areaPerFloorM2.toLocaleString();
-            document.getElementById('m-area-per-floor-ft2').textContent  = c.areaPerFloorFt2.toLocaleString() + ' ft²';
+            document.getElementById('m-area-per-floor-m2').textContent  = c.grossAreaPerFloorM2.toLocaleString();
+            document.getElementById('m-area-per-floor-ft2').textContent = c.grossAreaPerFloorFt2.toLocaleString() + ' ft²  ·  incl. 35% circulation';
         }
 
         function renderFloorPlan(c) {
