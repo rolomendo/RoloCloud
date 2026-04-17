@@ -192,6 +192,12 @@
             margin-top: 4px;
         }
 
+        .metric-sublabel {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 2px;
+        }
+
         /* --- Floor Plan --- */
         #floor-plan-legend {
             display: flex;
@@ -361,6 +367,11 @@
                 <div class="metric-card">
                     <div class="metric-value" id="m-avg-size"></div>
                     <div class="metric-label">Avg Room Size (m²)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="m-area-per-floor-m2"></div>
+                    <div class="metric-label">Area / Floor (m²)</div>
+                    <div class="metric-sublabel" id="m-area-per-floor-ft2"></div>
                 </div>
             </div>
         </section>
@@ -578,16 +589,20 @@
             const roomSequence = buildRoomSequence(counts);
             const floorGrid = buildFloorGrid(roomSequence, floors, roomsPerFloor);
 
-            return { totalRooms, floors, roomsPerFloor, counts, roomTypeStats, totalGuests, totalArea, avgRoomSize, roomSequence, floorGrid };
+            const areaPerFloorM2 = floors > 0 ? Math.round(totalArea / floors) : 0;
+            const areaPerFloorFt2 = Math.round(areaPerFloorM2 * 10.764);
+            return { totalRooms, floors, roomsPerFloor, counts, roomTypeStats, totalGuests, totalArea, avgRoomSize, areaPerFloorM2, areaPerFloorFt2, roomSequence, floorGrid };
         }
 
         // ── Rendering ──────────────────────────────────────────────────────────
 
         function renderMetrics(c) {
-            document.getElementById('m-total-keys').textContent    = c.totalRooms.toLocaleString();
-            document.getElementById('m-total-guests').textContent  = c.totalGuests.toLocaleString();
-            document.getElementById('m-total-area').textContent    = c.totalArea.toLocaleString();
-            document.getElementById('m-avg-size').textContent      = c.avgRoomSize;
+            document.getElementById('m-total-keys').textContent          = c.totalRooms.toLocaleString();
+            document.getElementById('m-total-guests').textContent        = c.totalGuests.toLocaleString();
+            document.getElementById('m-total-area').textContent          = c.totalArea.toLocaleString();
+            document.getElementById('m-avg-size').textContent            = c.avgRoomSize;
+            document.getElementById('m-area-per-floor-m2').textContent   = c.areaPerFloorM2.toLocaleString();
+            document.getElementById('m-area-per-floor-ft2').textContent  = c.areaPerFloorFt2.toLocaleString() + ' ft²';
         }
 
         function renderFloorPlan(c) {
