@@ -12,50 +12,302 @@
             --color-suite: #f87171;
             --color-empty: #e5e7eb;
         }
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 40px 20px; }
-        #configurator { background: white; padding: 30px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 900px; margin: 0 auto; }
-        h1 { margin: 0 0 24px 0; font-size: 22px; color: #1f2937; }
-        h2 { font-size: 16px; color: #374151; margin: 24px 0 12px 0; padding-bottom: 6px; border-bottom: 1px solid #e5e7eb; }
-        .input-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-        .input-row label { min-width: 150px; font-size: 14px; color: #374151; }
-        .input-row input[type="number"] { width: 90px; padding: 6px 10px; font-size: 15px; border: 1px solid #d1d5db; border-radius: 4px; }
-        .derived-display { font-size: 14px; color: #6b7280; margin: 6px 0 14px 0; }
-        .derived-display strong { color: #1f2937; font-size: 16px; }
-        .slider-section-label { font-size: 14px; color: #374151; margin: 14px 0 8px 0; font-weight: bold; }
-        .slider-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-        .slider-row label { min-width: 120px; font-size: 14px; color: #374151; display: flex; align-items: center; gap: 6px; }
-        .slider-row input[type="range"] { flex: 1; cursor: pointer; }
-        .pct-display { min-width: 40px; text-align: right; font-weight: bold; font-size: 14px; color: #1f2937; }
-        .legend-dot { width: 12px; height: 12px; border-radius: 2px; display: inline-block; flex-shrink: 0; }
-        #pct-total-display { font-size: 13px; color: #6b7280; margin: 4px 0 6px 0; }
-        #pct-warning { color: #dc2626; font-size: 13px; margin: 2px 0 6px 0; }
-        button { padding: 10px 22px; font-size: 15px; cursor: pointer; background: #1f2937; color: white; border: none; border-radius: 4px; margin-top: 8px; }
-        button:hover:not(:disabled) { background: #374151; }
-        button:disabled { background: #9ca3af; cursor: not-allowed; }
-        #btn-export { background: #065f46; margin-top: 4px; }
-        #btn-export:hover { background: #047857; }
-        #metrics-grid { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
-        .metric-card { flex: 1 1 150px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 14px 16px; text-align: center; }
-        .metric-value { font-size: 26px; font-weight: bold; color: #1f2937; }
-        .metric-label { font-size: 12px; color: #6b7280; margin-top: 4px; }
-        .metric-sublabel { font-size: 11px; color: #9ca3af; margin-top: 2px; }
-        #floor-plan-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; font-size: 13px; }
-        .legend-item { display: flex; align-items: center; gap: 6px; color: #374151; }
-        #floor-plan-container { overflow-x: auto; padding-bottom: 8px; }
-        .floor-row { display: flex; align-items: center; gap: 3px; margin-bottom: 3px; }
-        .floor-label { min-width: 64px; font-size: 11px; color: #9ca3af; text-align: right; padding-right: 8px; flex-shrink: 0; }
-        .room-cell { width: 18px; height: 18px; border-radius: 2px; flex-shrink: 0; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        #configurator {
+            background: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin: 0 0 24px 0;
+            font-size: 22px;
+            color: #1f2937;
+        }
+
+        h2 {
+            font-size: 16px;
+            color: #374151;
+            margin: 24px 0 12px 0;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* --- Inputs --- */
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .input-row label {
+            min-width: 150px;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .input-row input[type="number"] {
+            width: 90px;
+            padding: 6px 10px;
+            font-size: 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+        }
+
+        .derived-display {
+            font-size: 14px;
+            color: #6b7280;
+            margin: 6px 0 14px 0;
+        }
+
+        .derived-display strong {
+            color: #1f2937;
+            font-size: 16px;
+        }
+
+        /* --- Sliders --- */
+        .slider-section-label {
+            font-size: 14px;
+            color: #374151;
+            margin: 14px 0 6px 0;
+            font-weight: bold;
+        }
+
+        .slider-col-headers {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+            font-size: 11px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .slider-col-headers .col-name  { min-width: 120px; }
+        .slider-col-headers .col-mix   { flex: 1; }
+        .slider-col-headers .col-pct   { min-width: 40px; text-align: right; }
+        .slider-col-headers .col-rate  { min-width: 90px; text-align: right; }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .slider-row label {
+            min-width: 120px;
+            font-size: 14px;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .slider-row input[type="range"] {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .pct-display {
+            min-width: 40px;
+            text-align: right;
+            font-weight: bold;
+            font-size: 14px;
+            color: #1f2937;
+        }
+
+        .rate-input {
+            width: 80px;
+            padding: 5px 8px;
+            font-size: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            text-align: right;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        #pct-total-display {
+            font-size: 13px;
+            color: #6b7280;
+            margin: 4px 0 6px 0;
+        }
+
+        #pct-warning {
+            color: #dc2626;
+            font-size: 13px;
+            margin: 2px 0 6px 0;
+        }
+
+        /* --- Generate Button --- */
+        button {
+            padding: 10px 22px;
+            font-size: 15px;
+            cursor: pointer;
+            background: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-top: 8px;
+        }
+
+        button:hover:not(:disabled) {
+            background: #374151;
+        }
+
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        #btn-export {
+            background: #065f46;
+            margin-top: 4px;
+        }
+
+        #btn-export:hover {
+            background: #047857;
+        }
+
+        /* --- Metric Cards --- */
+        #metrics-grid {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .metric-card {
+            flex: 1 1 150px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 14px 16px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 26px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .metric-sublabel {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 2px;
+        }
+
+        /* --- Floor Plan --- */
+        #floor-plan-legend {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #374151;
+        }
+
+        #floor-plan-container {
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .floor-row {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            margin-bottom: 3px;
+        }
+
+        .floor-label {
+            min-width: 64px;
+            font-size: 11px;
+            color: #9ca3af;
+            text-align: right;
+            padding-right: 8px;
+            flex-shrink: 0;
+        }
+
+        .room-cell {
+            width: 18px;
+            height: 18px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
         .room-single       { background-color: var(--color-single); }
         .room-double       { background-color: var(--color-double); }
         .room-junior-suite { background-color: var(--color-junior-suite); }
         .room-suite        { background-color: var(--color-suite); }
         .room-empty        { background-color: var(--color-empty); }
-        #summary-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        #summary-table th, #summary-table td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #e5e7eb; }
-        #summary-table thead th { background: #f9fafb; font-weight: 600; color: #374151; }
-        #summary-table tfoot td { font-weight: bold; background: #f3f4f6; border-top: 2px solid #d1d5db; }
-        .type-chip { display: inline-flex; align-items: center; gap: 6px; }
+
+        /* --- Summary Table --- */
+        #summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        #summary-table th,
+        #summary-table td {
+            text-align: left;
+            padding: 8px 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        #summary-table thead th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        #summary-table tfoot td {
+            font-weight: bold;
+            background: #f3f4f6;
+            border-top: 2px solid #d1d5db;
+        }
+
+        .type-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* --- Utilities --- */
         .hidden { display: none !important; }
+
         section { margin-bottom: 8px; }
     </style>
 </head>
@@ -63,8 +315,10 @@
     <div id="configurator">
         <h1>Hotel Room Configurator</h1>
 
+        <!-- SECTION: Inputs -->
         <section id="section-inputs">
             <h2>Configuration</h2>
+
             <div class="input-row">
                 <label for="input-floors">Height limit (floors)</label>
                 <input type="number" id="input-floors" min="1" max="200" value="10">
@@ -74,40 +328,67 @@
                 <input type="number" id="input-rooms-per-floor" min="1" max="200" value="10">
             </div>
             <div class="input-row">
-                <label for="input-adr">Avg daily rate (USD)</label>
-                <input type="number" id="input-adr" min="0" step="1" value="150">
-            </div>
-            <div class="input-row">
                 <label for="input-occupancy">Occupancy (%)</label>
                 <input type="number" id="input-occupancy" min="0" max="100" step="1" value="70">
             </div>
-            <div class="derived-display">Total keys: <strong id="derived-total-rooms">100</strong></div>
-            <div class="slider-section-label">Room type mix</div>
+
+            <div class="derived-display">
+                Total keys: <strong id="derived-total-rooms">100</strong>
+            </div>
+
+            <div class="slider-section-label">Room type mix &amp; daily rates</div>
+
+            <div class="slider-col-headers">
+                <span class="col-name">Type</span>
+                <span class="col-mix">Mix</span>
+                <span class="col-pct">%</span>
+                <span class="col-rate">Rate (USD)</span>
+            </div>
+
             <div class="slider-row">
-                <label for="slider-single"><span class="legend-dot" style="background:var(--color-single)"></span>Single</label>
+                <label for="slider-single">
+                    <span class="legend-dot" style="background:var(--color-single)"></span>
+                    Single
+                </label>
                 <input type="range" id="slider-single" min="0" max="100" value="40">
                 <span class="pct-display" id="pct-single">40%</span>
+                <input type="number" id="rate-single" class="rate-input" min="0" step="1" value="120">
             </div>
             <div class="slider-row">
-                <label for="slider-double"><span class="legend-dot" style="background:var(--color-double)"></span>Double</label>
+                <label for="slider-double">
+                    <span class="legend-dot" style="background:var(--color-double)"></span>
+                    Double
+                </label>
                 <input type="range" id="slider-double" min="0" max="100" value="30">
                 <span class="pct-display" id="pct-double">30%</span>
+                <input type="number" id="rate-double" class="rate-input" min="0" step="1" value="160">
             </div>
             <div class="slider-row">
-                <label for="slider-junior-suite"><span class="legend-dot" style="background:var(--color-junior-suite)"></span>Junior Suite</label>
+                <label for="slider-junior-suite">
+                    <span class="legend-dot" style="background:var(--color-junior-suite)"></span>
+                    Junior Suite
+                </label>
                 <input type="range" id="slider-junior-suite" min="0" max="100" value="20">
                 <span class="pct-display" id="pct-junior-suite">20%</span>
+                <input type="number" id="rate-junior-suite" class="rate-input" min="0" step="1" value="240">
             </div>
             <div class="slider-row">
-                <label for="slider-suite"><span class="legend-dot" style="background:var(--color-suite)"></span>Suite</label>
+                <label for="slider-suite">
+                    <span class="legend-dot" style="background:var(--color-suite)"></span>
+                    Suite
+                </label>
                 <input type="range" id="slider-suite" min="0" max="100" value="10">
                 <span class="pct-display" id="pct-suite">10%</span>
+                <input type="number" id="rate-suite" class="rate-input" min="0" step="1" value="380">
             </div>
+
             <div id="pct-total-display">Total: <strong id="pct-total">100</strong>%</div>
             <div id="pct-warning" class="hidden">Percentages must sum to 100%</div>
-            <button id="btn-generate" onclick="generate()">Generate</button>
+
+            <button id="btn-generate" onclick="generate()">Generate Floor Plan</button>
         </section>
 
+        <!-- SECTION: Metrics (hidden until generated) -->
         <section id="section-metrics" class="hidden">
             <h2>Capacity Metrics</h2>
             <div id="metrics-grid">
@@ -135,11 +416,12 @@
                 <div class="metric-card">
                     <div class="metric-value" id="m-daily-revenue"></div>
                     <div class="metric-label">Daily Revenue (USD)</div>
-                    <div class="metric-sublabel" id="m-daily-revenue-occ"></div>
+                    <div class="metric-sublabel" id="m-daily-revenue-sub"></div>
                 </div>
             </div>
         </section>
 
+        <!-- SECTION: Floor Plan (hidden until generated) -->
         <section id="section-floorplan" class="hidden">
             <h2>Diagrammatic Section / Elevation</h2>
             <div id="floor-plan-legend">
@@ -151,14 +433,21 @@
             <div id="floor-plan-container"></div>
         </section>
 
+        <!-- SECTION: Summary Table (hidden until generated) -->
         <section id="section-summary" class="hidden">
             <h2>Room Summary</h2>
             <table id="summary-table">
                 <thead>
                     <tr>
-                        <th>Type</th><th>Count</th><th>Mix</th>
-                        <th>Guests/Room</th><th>Total Guests</th>
-                        <th>Area/Room (m²)</th><th>Total Area (m²)</th>
+                        <th>Type</th>
+                        <th>Count</th>
+                        <th>Mix</th>
+                        <th>Guests/Room</th>
+                        <th>Total Guests</th>
+                        <th>Area/Room (m²)</th>
+                        <th>Total Area (m²)</th>
+                        <th>Rate (USD)</th>
+                        <th>Daily Rev (USD)</th>
                     </tr>
                 </thead>
                 <tbody id="summary-tbody"></tbody>
@@ -166,6 +455,7 @@
             </table>
         </section>
 
+        <!-- SECTION: Export (hidden until generated) -->
         <section id="section-export" class="hidden">
             <h2>Export</h2>
             <button id="btn-export" onclick="exportJSON()">Download JSON Config</button>
@@ -173,6 +463,8 @@
     </div>
 
     <script>
+        // ── Constants ──────────────────────────────────────────────────────────
+
         const ROOM_TYPES = [
             { key: 'single',      label: 'Single',       cssClass: 'room-single',       guests: 1, area: 22 },
             { key: 'double',      label: 'Double',       cssClass: 'room-double',       guests: 2, area: 30 },
@@ -181,55 +473,70 @@
         ];
 
         const SLIDER_MAP = [
-            { sliderId: 'slider-single',       pctId: 'pct-single',       key: 'single'      },
-            { sliderId: 'slider-double',       pctId: 'pct-double',       key: 'double'      },
-            { sliderId: 'slider-junior-suite', pctId: 'pct-junior-suite', key: 'juniorSuite' },
-            { sliderId: 'slider-suite',        pctId: 'pct-suite',        key: 'suite'       },
+            { sliderId: 'slider-single',       pctId: 'pct-single',       rateId: 'rate-single',       key: 'single'      },
+            { sliderId: 'slider-double',       pctId: 'pct-double',       rateId: 'rate-double',       key: 'double'      },
+            { sliderId: 'slider-junior-suite', pctId: 'pct-junior-suite', rateId: 'rate-junior-suite', key: 'juniorSuite' },
+            { sliderId: 'slider-suite',        pctId: 'pct-suite',        rateId: 'rate-suite',        key: 'suite'       },
         ];
+
+        // ── State ──────────────────────────────────────────────────────────────
 
         const STATE = {
             floors: 10,
             roomsPerFloor: 10,
-            adr: 150,
             occupancy: 70,
             percentages: { single: 40, double: 30, juniorSuite: 20, suite: 10 },
+            rates: { single: 120, double: 160, juniorSuite: 240, suite: 380 },
             computed: null,
         };
 
+        // ── Initialization ─────────────────────────────────────────────────────
+
         function init() {
-            SLIDER_MAP.forEach(({ sliderId, key }) => {
+            SLIDER_MAP.forEach(({ sliderId, rateId, key }) => {
                 document.getElementById(sliderId).addEventListener('input', function () {
                     onSliderChange(key, parseInt(this.value, 10));
                 });
+                document.getElementById(rateId).addEventListener('input', function () {
+                    STATE.rates[key] = Math.max(0, parseFloat(this.value) || 0);
+                });
             });
+
             document.getElementById('input-floors').addEventListener('input', function () {
                 STATE.floors = Math.max(1, parseInt(this.value, 10) || 1);
                 updateDerivedTotal();
             });
+
             document.getElementById('input-rooms-per-floor').addEventListener('input', function () {
                 STATE.roomsPerFloor = Math.max(1, parseInt(this.value, 10) || 1);
                 updateDerivedTotal();
             });
-            document.getElementById('input-adr').addEventListener('input', function () {
-                STATE.adr = Math.max(0, parseFloat(this.value) || 0);
-            });
+
             document.getElementById('input-occupancy').addEventListener('input', function () {
                 STATE.occupancy = Math.min(100, Math.max(0, parseFloat(this.value) || 0));
             });
+
             updateSliderDisplay();
             updateDerivedTotal();
         }
 
+        // ── Inputs ─────────────────────────────────────────────────────────────
+
         function readInputs() {
-            STATE.floors      = Math.max(1, parseInt(document.getElementById('input-floors').value, 10) || 1);
+            STATE.floors        = Math.max(1, parseInt(document.getElementById('input-floors').value, 10) || 1);
             STATE.roomsPerFloor = Math.max(1, parseInt(document.getElementById('input-rooms-per-floor').value, 10) || 1);
-            STATE.adr         = Math.max(0, parseFloat(document.getElementById('input-adr').value) || 0);
-            STATE.occupancy   = Math.min(100, Math.max(0, parseFloat(document.getElementById('input-occupancy').value) || 0));
+            STATE.occupancy     = Math.min(100, Math.max(0, parseFloat(document.getElementById('input-occupancy').value) || 0));
+            SLIDER_MAP.forEach(({ rateId, key }) => {
+                STATE.rates[key] = Math.max(0, parseFloat(document.getElementById(rateId).value) || 0);
+            });
         }
 
         function updateDerivedTotal() {
-            document.getElementById('derived-total-rooms').textContent = (STATE.floors * STATE.roomsPerFloor).toLocaleString();
+            const total = STATE.floors * STATE.roomsPerFloor;
+            document.getElementById('derived-total-rooms').textContent = total.toLocaleString();
         }
+
+        // ── Slider Logic ───────────────────────────────────────────────────────
 
         function onSliderChange(changedKey, newValue) {
             newValue = Math.min(100, Math.max(0, newValue));
@@ -242,21 +549,26 @@
             const remaining = 100 - newValue;
             const others = ROOM_TYPES.map(rt => rt.key).filter(k => k !== changedKey);
             const othersSum = others.reduce((s, k) => s + STATE.percentages[k], 0);
+
             if (othersSum === 0) {
                 const base = Math.floor(remaining / others.length);
                 const leftover = remaining - base * others.length;
-                others.forEach((k, i) => { STATE.percentages[k] = base + (i === others.length - 1 ? leftover : 0); });
+                others.forEach((k, i) => {
+                    STATE.percentages[k] = base + (i === others.length - 1 ? leftover : 0);
+                });
             } else {
                 let assigned = 0;
                 others.forEach((k, i) => {
                     if (i < others.length - 1) {
                         const val = Math.round((STATE.percentages[k] / othersSum) * remaining);
-                        STATE.percentages[k] = val; assigned += val;
+                        STATE.percentages[k] = val;
+                        assigned += val;
                     } else {
                         STATE.percentages[k] = remaining - assigned;
                     }
                 });
             }
+
             STATE.percentages[changedKey] = newValue;
         }
 
@@ -265,15 +577,19 @@
                 document.getElementById(sliderId).value = STATE.percentages[key];
                 document.getElementById(pctId).textContent = STATE.percentages[key] + '%';
             });
-            document.getElementById('pct-total').textContent = Object.values(STATE.percentages).reduce((s, v) => s + v, 0);
+            const total = Object.values(STATE.percentages).reduce((s, v) => s + v, 0);
+            document.getElementById('pct-total').textContent = total;
         }
 
         function validatePercentages() {
-            const valid = Object.values(STATE.percentages).reduce((s, v) => s + v, 0) === 100;
+            const total = Object.values(STATE.percentages).reduce((s, v) => s + v, 0);
+            const valid = total === 100;
             document.getElementById('pct-warning').classList.toggle('hidden', valid);
             document.getElementById('btn-generate').disabled = !valid;
             return valid;
         }
+
+        // ── Computation ────────────────────────────────────────────────────────
 
         function computeCounts(totalRooms) {
             const counts = {};
@@ -281,23 +597,28 @@
             ROOM_TYPES.forEach((rt, i) => {
                 if (i < ROOM_TYPES.length - 1) {
                     const val = Math.round(totalRooms * STATE.percentages[rt.key] / 100);
-                    counts[rt.key] = val; assigned += val;
-                } else { counts[rt.key] = totalRooms - assigned; }
+                    counts[rt.key] = val;
+                    assigned += val;
+                } else {
+                    counts[rt.key] = totalRooms - assigned;
+                }
             });
             return counts;
         }
 
         function buildRoomSequence(counts) {
             const seq = [];
-            ROOM_TYPES.forEach(rt => { for (let i = 0; i < counts[rt.key]; i++) seq.push(rt.key); });
+            ROOM_TYPES.forEach(rt => {
+                for (let i = 0; i < counts[rt.key]; i++) seq.push(rt.key);
+            });
             return seq;
         }
 
-        function buildFloorGrid(seq, floors, rpf) {
+        function buildFloorGrid(roomSequence, floors, roomsPerFloor) {
             const grid = [];
             for (let f = 0; f < floors; f++) {
-                const slice = seq.slice(f * rpf, (f + 1) * rpf);
-                while (slice.length < rpf) slice.push(null);
+                const slice = roomSequence.slice(f * roomsPerFloor, (f + 1) * roomsPerFloor);
+                while (slice.length < roomsPerFloor) slice.push(null);
                 grid.push(slice);
             }
             return grid;
@@ -307,23 +628,43 @@
             const { floors, roomsPerFloor } = STATE;
             const totalRooms = floors * roomsPerFloor;
             const counts = computeCounts(totalRooms);
-            const roomTypeStats = ROOM_TYPES.map(rt => ({
-                key: rt.key, label: rt.label, count: counts[rt.key],
-                percentage: STATE.percentages[rt.key], guestsPerRoom: rt.guests,
-                totalGuests: counts[rt.key] * rt.guests, areaPerRoom: rt.area,
-                totalArea: counts[rt.key] * rt.area,
-            }));
-            const totalGuests = roomTypeStats.reduce((s, r) => s + r.totalGuests, 0);
-            const totalArea   = roomTypeStats.reduce((s, r) => s + r.totalArea, 0);
-            const avgRoomSize = totalRooms > 0 ? Math.round(totalArea / totalRooms) : 0;
+
+            const roomTypeStats = ROOM_TYPES.map(rt => {
+                const count    = counts[rt.key];
+                const rate     = STATE.rates[rt.key];
+                const dailyRev = Math.round(count * rate * (STATE.occupancy / 100));
+                return {
+                    key: rt.key,
+                    label: rt.label,
+                    count,
+                    percentage: STATE.percentages[rt.key],
+                    guestsPerRoom: rt.guests,
+                    totalGuests: count * rt.guests,
+                    areaPerRoom: rt.area,
+                    totalArea: count * rt.area,
+                    rate,
+                    dailyRevenue: dailyRev,
+                };
+            });
+
+            const totalGuests  = roomTypeStats.reduce((s, r) => s + r.totalGuests, 0);
+            const totalArea    = roomTypeStats.reduce((s, r) => s + r.totalArea, 0);
+            const avgRoomSize  = totalRooms > 0 ? Math.round(totalArea / totalRooms) : 0;
+            const dailyRevenue = roomTypeStats.reduce((s, r) => s + r.dailyRevenue, 0);
+            const blendedAdr   = totalRooms > 0
+                ? Math.round(ROOM_TYPES.reduce((s, rt) => s + counts[rt.key] * STATE.rates[rt.key], 0) / totalRooms)
+                : 0;
+
+            const roomSequence        = buildRoomSequence(counts);
+            const floorGrid           = buildFloorGrid(roomSequence, floors, roomsPerFloor);
             const netAreaPerFloorM2   = floors > 0 ? Math.round(totalArea / floors) : 0;
             const grossAreaPerFloorM2  = Math.round(netAreaPerFloorM2 * 1.35);
             const grossAreaPerFloorFt2 = Math.round(grossAreaPerFloorM2 * 10.764);
-            const dailyRevenue = Math.round(STATE.adr * totalRooms * (STATE.occupancy / 100));
-            const roomSequence = buildRoomSequence(counts);
-            const floorGrid = buildFloorGrid(roomSequence, floors, roomsPerFloor);
-            return { totalRooms, floors, roomsPerFloor, counts, roomTypeStats, totalGuests, totalArea, avgRoomSize, netAreaPerFloorM2, grossAreaPerFloorM2, grossAreaPerFloorFt2, dailyRevenue, roomSequence, floorGrid };
+
+            return { totalRooms, floors, roomsPerFloor, counts, roomTypeStats, totalGuests, totalArea, avgRoomSize, netAreaPerFloorM2, grossAreaPerFloorM2, grossAreaPerFloorFt2, dailyRevenue, blendedAdr, roomSequence, floorGrid };
         }
+
+        // ── Rendering ──────────────────────────────────────────────────────────
 
         function renderMetrics(c) {
             document.getElementById('m-total-keys').textContent         = c.totalRooms.toLocaleString();
@@ -333,7 +674,7 @@
             document.getElementById('m-area-per-floor-m2').textContent  = c.grossAreaPerFloorM2.toLocaleString();
             document.getElementById('m-area-per-floor-ft2').textContent = c.grossAreaPerFloorFt2.toLocaleString() + ' ft²  ·  incl. 35% circulation';
             document.getElementById('m-daily-revenue').textContent      = '$' + c.dailyRevenue.toLocaleString();
-            document.getElementById('m-daily-revenue-occ').textContent  = STATE.occupancy + '% occupancy';
+            document.getElementById('m-daily-revenue-sub').textContent  = STATE.occupancy + '% occ  ·  blended ADR $' + c.blendedAdr;
         }
 
         function renderFloorPlan(c) {
@@ -341,19 +682,23 @@
             container.innerHTML = '';
             const typeMap = {};
             ROOM_TYPES.forEach(rt => { typeMap[rt.key] = rt; });
+
             for (let f = c.floors - 1; f >= 0; f--) {
                 const row = document.createElement('div');
                 row.className = 'floor-row';
+
                 const lbl = document.createElement('span');
                 lbl.className = 'floor-label';
                 lbl.textContent = 'Floor ' + (f + 1);
                 row.appendChild(lbl);
+
                 c.floorGrid[f].forEach(roomKey => {
                     const cell = document.createElement('div');
                     cell.className = 'room-cell ' + (roomKey ? typeMap[roomKey].cssClass : 'room-empty');
                     if (roomKey) cell.title = typeMap[roomKey].label;
                     row.appendChild(cell);
                 });
+
                 container.appendChild(row);
             }
         }
@@ -361,22 +706,41 @@
         function renderSummaryTable(c) {
             const tbody = document.getElementById('summary-tbody');
             const tfoot = document.getElementById('summary-tfoot');
-            tbody.innerHTML = ''; tfoot.innerHTML = '';
+            tbody.innerHTML = '';
+            tfoot.innerHTML = '';
+
             c.roomTypeStats.forEach(r => {
                 const tr = document.createElement('tr');
+                const cssKey = r.key === 'juniorSuite' ? 'junior-suite' : r.key;
                 tr.innerHTML = `
                     <td><span class="type-chip">
-                        <span class="legend-dot" style="background:var(--color-${r.key === 'juniorSuite' ? 'junior-suite' : r.key})"></span>
-                        ${r.label}</span></td>
-                    <td>${r.count.toLocaleString()}</td><td>${r.percentage}%</td>
-                    <td>${r.guestsPerRoom}</td><td>${r.totalGuests.toLocaleString()}</td>
-                    <td>${r.areaPerRoom}</td><td>${r.totalArea.toLocaleString()}</td>`;
+                        <span class="legend-dot" style="background:var(--color-${cssKey})"></span>
+                        ${r.label}
+                    </span></td>
+                    <td>${r.count.toLocaleString()}</td>
+                    <td>${r.percentage}%</td>
+                    <td>${r.guestsPerRoom}</td>
+                    <td>${r.totalGuests.toLocaleString()}</td>
+                    <td>${r.areaPerRoom}</td>
+                    <td>${r.totalArea.toLocaleString()}</td>
+                    <td>$${r.rate.toLocaleString()}</td>
+                    <td>$${r.dailyRevenue.toLocaleString()}</td>
+                `;
                 tbody.appendChild(tr);
             });
+
             const footTr = document.createElement('tr');
-            footTr.innerHTML = `<td>Total</td><td>${c.totalRooms.toLocaleString()}</td><td>100%</td>
-                <td>—</td><td>${c.totalGuests.toLocaleString()}</td>
-                <td>${c.avgRoomSize} avg</td><td>${c.totalArea.toLocaleString()}</td>`;
+            footTr.innerHTML = `
+                <td>Total</td>
+                <td>${c.totalRooms.toLocaleString()}</td>
+                <td>100%</td>
+                <td>—</td>
+                <td>${c.totalGuests.toLocaleString()}</td>
+                <td>${c.avgRoomSize} avg</td>
+                <td>${c.totalArea.toLocaleString()}</td>
+                <td>$${c.blendedAdr} avg</td>
+                <td>$${c.dailyRevenue.toLocaleString()}</td>
+            `;
             tfoot.appendChild(footTr);
         }
 
@@ -385,6 +749,8 @@
                 document.getElementById(id).classList.remove('hidden');
             });
         }
+
+        // ── Main Action ────────────────────────────────────────────────────────
 
         function generate() {
             readInputs();
@@ -396,36 +762,56 @@
             showSections();
         }
 
+        // ── Export ─────────────────────────────────────────────────────────────
+
         function exportJSON() {
             const c = STATE.computed;
             const payload = {
-                meta: { generatedAt: new Date().toISOString(), tool: 'Hotel Room Configurator' },
+                meta: {
+                    generatedAt: new Date().toISOString(),
+                    tool: 'Hotel Room Configurator'
+                },
                 inputs: {
-                    heightLimitFloors: STATE.floors, roomsPerFloor: STATE.roomsPerFloor,
-                    avgDailyRateUSD: STATE.adr, occupancyPct: STATE.occupancy,
-                    totalKeys: c.totalRooms, roomTypeMix: { ...STATE.percentages }
+                    heightLimitFloors: STATE.floors,
+                    roomsPerFloor: STATE.roomsPerFloor,
+                    totalKeys: c.totalRooms,
+                    occupancyPct: STATE.occupancy,
+                    roomTypeMix: { ...STATE.percentages },
+                    dailyRates: { ...STATE.rates },
                 },
                 metrics: {
-                    totalKeys: c.totalRooms, maxGuests: c.totalGuests,
-                    totalAreaM2: c.totalArea, avgRoomSizeM2: c.avgRoomSize,
-                    netAreaPerFloorM2: c.netAreaPerFloorM2,
+                    totalKeys: c.totalRooms,
+                    maxGuests: c.totalGuests,
+                    totalAreaM2: c.totalArea,
+                    avgRoomSizeM2: c.avgRoomSize,
                     grossAreaPerFloorM2: c.grossAreaPerFloorM2,
                     grossAreaPerFloorFt2: c.grossAreaPerFloorFt2,
-                    circulationAllowance: '35%',
-                    dailyRevenueUSD: c.dailyRevenue,
-                    occupancyPct: STATE.occupancy
+                    blendedAdr: c.blendedAdr,
+                    dailyRevenue: c.dailyRevenue,
+                    occupancyPct: STATE.occupancy,
                 },
                 roomTypes: c.roomTypeStats.map(r => ({
-                    type: r.label, count: r.count, mixPercentage: r.percentage,
-                    guestsPerRoom: r.guestsPerRoom, totalGuests: r.totalGuests,
-                    areaPerRoomM2: r.areaPerRoom, totalAreaM2: r.totalArea
+                    type: r.label,
+                    count: r.count,
+                    mixPercentage: r.percentage,
+                    guestsPerRoom: r.guestsPerRoom,
+                    totalGuests: r.totalGuests,
+                    areaPerRoomM2: r.areaPerRoom,
+                    totalAreaM2: r.totalArea,
+                    rateUsd: r.rate,
+                    dailyRevenueUsd: r.dailyRevenue,
                 }))
             };
+
+            const json = JSON.stringify(payload, null, 2);
+            const dataURI = 'data:application/json;charset=utf-8,' + encodeURIComponent(json);
             const a = document.createElement('a');
-            a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(payload, null, 2));
+            a.href = dataURI;
             a.download = 'hotel-config.json';
             a.click();
         }
+
+        // ── Boot ───────────────────────────────────────────────────────────────
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
