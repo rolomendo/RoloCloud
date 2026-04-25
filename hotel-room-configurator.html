@@ -330,8 +330,8 @@
                 <input type="number" id="input-floors" min="1" max="200" value="10">
             </div>
             <div class="input-row">
-                <label for="input-rooms-per-floor">Rooms per floor</label>
-                <input type="number" id="input-rooms-per-floor" min="1" max="200" value="10">
+                <label for="input-total-keys">Total keys</label>
+                <input type="number" id="input-total-keys" min="1" max="10000" value="100">
             </div>
             <div class="input-row">
                 <label for="input-occupancy">Occupancy (%)</label>
@@ -339,7 +339,7 @@
             </div>
 
             <div class="derived-display">
-                Total keys: <strong id="derived-total-rooms">100</strong>
+                Rooms per floor: <strong id="derived-rooms-per-floor">10</strong>
             </div>
 
             <div class="slider-section-label">Room type mix &amp; daily rates</div>
@@ -489,7 +489,7 @@
 
         const STATE = {
             floors: 10,
-            roomsPerFloor: 10,
+            totalKeys: 100,
             occupancy: 70,
             percentages: { single: 40, double: 30, juniorSuite: 20, suite: 10 },
             rates: { single: 120, double: 160, juniorSuite: 240, suite: 380 },
@@ -513,8 +513,8 @@
                 updateDerivedTotal();
             });
 
-            document.getElementById('input-rooms-per-floor').addEventListener('input', function () {
-                STATE.roomsPerFloor = Math.max(1, parseInt(this.value, 10) || 1);
+            document.getElementById('input-total-keys').addEventListener('input', function () {
+                STATE.totalKeys = Math.max(1, parseInt(this.value, 10) || 1);
                 updateDerivedTotal();
             });
 
@@ -530,17 +530,17 @@
         // ── Inputs ─────────────────────────────────────────────────────────────
 
         function readInputs() {
-            STATE.floors        = Math.max(1, parseInt(document.getElementById('input-floors').value, 10) || 1);
-            STATE.roomsPerFloor = Math.max(1, parseInt(document.getElementById('input-rooms-per-floor').value, 10) || 1);
-            STATE.occupancy     = Math.min(100, Math.max(0, parseFloat(document.getElementById('input-occupancy').value) || 0));
+            STATE.floors    = Math.max(1, parseInt(document.getElementById('input-floors').value, 10) || 1);
+            STATE.totalKeys = Math.max(1, parseInt(document.getElementById('input-total-keys').value, 10) || 1);
+            STATE.occupancy = Math.min(100, Math.max(0, parseFloat(document.getElementById('input-occupancy').value) || 0));
             SLIDER_MAP.forEach(({ rateId, key }) => {
                 STATE.rates[key] = Math.max(0, parseFloat(document.getElementById(rateId).value) || 0);
             });
         }
 
         function updateDerivedTotal() {
-            const total = STATE.floors * STATE.roomsPerFloor;
-            document.getElementById('derived-total-rooms').textContent = total.toLocaleString();
+            const rpf = Math.ceil(STATE.totalKeys / STATE.floors);
+            document.getElementById('derived-rooms-per-floor').textContent = rpf.toLocaleString();
         }
 
         // ── Slider Logic ───────────────────────────────────────────────────────
@@ -632,8 +632,9 @@
         }
 
         function computeConfig() {
-            const { floors, roomsPerFloor } = STATE;
-            const totalRooms = floors * roomsPerFloor;
+            const { floors } = STATE;
+            const totalRooms = STATE.totalKeys;
+            const roomsPerFloor = Math.ceil(totalRooms / floors);
             const counts = computeCounts(totalRooms);
 
             const roomTypeStats = ROOM_TYPES.map(rt => {
@@ -781,8 +782,8 @@
                 },
                 inputs: {
                     heightLimitFloors: STATE.floors,
-                    roomsPerFloor: STATE.roomsPerFloor,
-                    totalKeys: c.totalRooms,
+                    totalKeys: STATE.totalKeys,
+                    roomsPerFloor: c.roomsPerFloor,
                     occupancyPct: STATE.occupancy,
                     roomTypeMix: { ...STATE.percentages },
                     dailyRates: { ...STATE.rates },
