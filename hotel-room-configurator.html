@@ -391,7 +391,7 @@
             <div id="pct-total-display">Total: <strong id="pct-total">100</strong>%</div>
             <div id="pct-warning" class="hidden">Percentages must sum to 100%</div>
 
-            <button id="btn-generate" onclick="generate()">Generate Floor Plan</button>
+            <button type="button" id="btn-generate" onclick="generate()">Generate Floor Plan</button>
         </section>
 
         <!-- SECTION: Metrics (hidden until generated) -->
@@ -464,7 +464,7 @@
         <!-- SECTION: Export (hidden until generated) -->
         <section id="section-export" class="hidden">
             <h2>Export</h2>
-            <button id="btn-export" onclick="exportJSON()">Download JSON Config</button>
+            <button type="button" id="btn-export" onclick="exportJSON()">Download JSON Config</button>
         </section>
     </div>
 
@@ -524,6 +524,7 @@
 
             updateSliderDisplay();
             updateDerivedTotal();
+            validatePercentages();
         }
 
         // ── Inputs ─────────────────────────────────────────────────────────────
@@ -754,6 +755,7 @@
             ['section-metrics', 'section-floorplan', 'section-summary', 'section-export'].forEach(id => {
                 document.getElementById(id).classList.remove('hidden');
             });
+            document.getElementById('section-metrics').scrollIntoView({ behavior: 'smooth' });
         }
 
         // ── Main Action ────────────────────────────────────────────────────────
