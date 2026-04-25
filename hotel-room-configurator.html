@@ -385,7 +385,7 @@
             <div id="pct-total-display">Total: <strong id="pct-total">100</strong>%</div>
             <div id="pct-warning" class="hidden">Percentages must sum to 100%</div>
 
-            <button id="btn-generate" onclick="generate()">Generate Floor Plan</button>
+            <button type="button" id="btn-generate" onclick="generate()">Generate Floor Plan</button>
         </section>
 
         <!-- SECTION: Metrics (hidden until generated) -->
@@ -458,7 +458,7 @@
         <!-- SECTION: Export (hidden until generated) -->
         <section id="section-export" class="hidden">
             <h2>Export</h2>
-            <button id="btn-export" onclick="exportJSON()">Download JSON Config</button>
+            <button type="button" id="btn-export" onclick="exportJSON()">Download JSON Config</button>
         </section>
     </div>
 
@@ -518,6 +518,7 @@
 
             updateSliderDisplay();
             updateDerivedTotal();
+            validatePercentages();
         }
 
         // ── Inputs ─────────────────────────────────────────────────────────────
@@ -630,9 +631,9 @@
             const counts = computeCounts(totalRooms);
 
             const roomTypeStats = ROOM_TYPES.map(rt => {
-                const count    = counts[rt.key];
-                const rate     = STATE.rates[rt.key];
-                const dailyRev = Math.round(count * rate * (STATE.occupancy / 100));
+                const count       = counts[rt.key];
+                const rate        = STATE.rates[rt.key];
+                const dailyRev    = Math.round(count * rate * (STATE.occupancy / 100));
                 return {
                     key: rt.key,
                     label: rt.label,
@@ -647,16 +648,16 @@
                 };
             });
 
-            const totalGuests  = roomTypeStats.reduce((s, r) => s + r.totalGuests, 0);
-            const totalArea    = roomTypeStats.reduce((s, r) => s + r.totalArea, 0);
-            const avgRoomSize  = totalRooms > 0 ? Math.round(totalArea / totalRooms) : 0;
-            const dailyRevenue = roomTypeStats.reduce((s, r) => s + r.dailyRevenue, 0);
-            const blendedAdr   = totalRooms > 0
+            const totalGuests   = roomTypeStats.reduce((s, r) => s + r.totalGuests, 0);
+            const totalArea     = roomTypeStats.reduce((s, r) => s + r.totalArea, 0);
+            const avgRoomSize   = totalRooms > 0 ? Math.round(totalArea / totalRooms) : 0;
+            const dailyRevenue  = roomTypeStats.reduce((s, r) => s + r.dailyRevenue, 0);
+            const blendedAdr    = totalRooms > 0
                 ? Math.round(ROOM_TYPES.reduce((s, rt) => s + counts[rt.key] * STATE.rates[rt.key], 0) / totalRooms)
                 : 0;
 
-            const roomSequence        = buildRoomSequence(counts);
-            const floorGrid           = buildFloorGrid(roomSequence, floors, roomsPerFloor);
+            const roomSequence       = buildRoomSequence(counts);
+            const floorGrid          = buildFloorGrid(roomSequence, floors, roomsPerFloor);
             const netAreaPerFloorM2   = floors > 0 ? Math.round(totalArea / floors) : 0;
             const grossAreaPerFloorM2  = Math.round(netAreaPerFloorM2 * 1.35);
             const grossAreaPerFloorFt2 = Math.round(grossAreaPerFloorM2 * 10.764);
@@ -748,6 +749,7 @@
             ['section-metrics', 'section-floorplan', 'section-summary', 'section-export'].forEach(id => {
                 document.getElementById(id).classList.remove('hidden');
             });
+            document.getElementById('section-metrics').scrollIntoView({ behavior: 'smooth' });
         }
 
         // ── Main Action ────────────────────────────────────────────────────────
